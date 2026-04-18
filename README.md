@@ -1,20 +1,21 @@
+<div align="center">
+
 # bloatr
 
-> Kill your Mac's bloat. Select. Delete. Done.
+**Kill your Mac's bloat. Select. Delete. Done.**
 
-A dead-simple macOS CLI that finds your biggest developer cache directories, lets you browse them, and deletes what you don't need — with a clean terminal UI.
+[![PyPI](https://img.shields.io/pypi/v/bloatr?color=ff6b6b&label=pypi)](https://pypi.org/project/bloatr/)
+[![Python](https://img.shields.io/pypi/pyversions/bloatr?color=4ecdc4)](https://pypi.org/project/bloatr/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-a8e6cf)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-macOS-c3b1e1)](https://github.com/suhasdinesh/bloatr)
 
-```
-  SIZE        LOCATION
-  24.3 GB ▶   ~/Library/Developer/Xcode/DerivedData
-  11.2 GB     ~/Library/Caches
-   4.1 GB     ~/Library/Android/sdk
-   3.1 GB     ~/.expo
-   1.9 GB     ~/.gradle/caches
-   515 MB      ~/.npm
+A macOS CLI for developers who've run out of disk space one too many times.  
+Finds your biggest caches and build artifacts, lets you explore and delete them safely — with a live progress bar.
 
-  space:select  enter:explore  esc:back  d:delete  q:quit
-```
+<!-- Replace with demo.gif once recorded -->
+![bloatr screenshot](screenshot.svg)
+
+</div>
 
 ---
 
@@ -24,35 +25,47 @@ A dead-simple macOS CLI that finds your biggest developer cache directories, let
 pipx install bloatr
 ```
 
-Or with pip:
+<details>
+<summary>Or with pip</summary>
 
 ```bash
 pip install bloatr
 ```
+
+</details>
 
 ---
 
 ## Usage
 
 ```bash
-# Launch interactive TUI (scans known developer bloat locations)
+# Launch interactive TUI — scans known developer bloat locations
 bloatr
 
-# Scan any directory — like `du` but interactive
+# Scan any directory, like `du` but interactive
 bloatr ~/
-bloatr ~/Documents
 bloatr ~/Library/Caches
+bloatr ~/Documents
 
-# Preview what would be deleted (safe mode)
+# Safe preview — see what would be deleted without touching anything
 bloatr --dry-run
 
-# Only show items > 1 GB
+# Only show items larger than a threshold
 bloatr --min-size 1G
 
-# JSON output (pipe-friendly)
+# JSON output — pipe-friendly
 bloatr --json
-bloatr --json ~/Library | jq '.[].size_human'
+bloatr --json | jq '.[].size_human'
 ```
+
+---
+
+## How it works
+
+1. **Scan** — bloatr measures your biggest developer cache directories in parallel
+2. **Explore** — drill into any folder with `Enter` to see what's inside
+3. **Select** — press `Space` on items you want to delete
+4. **Delete** — press `D`, confirm, and watch a live progress bar as space is freed
 
 ---
 
@@ -79,6 +92,8 @@ bloatr --json ~/Library | jq '.[].size_human'
 | `~/Library/Application Support/JetBrains` | JetBrains IDE caches |
 | Homebrew cache | `brew --cache` output |
 
+> **Tip:** Don't see a location you care about? Run `bloatr ~/` to scan your entire home directory.
+
 ---
 
 ## Keyboard shortcuts
@@ -99,17 +114,20 @@ bloatr --json ~/Library | jq '.[].size_human'
 ## Safety
 
 bloatr will **never** delete:
+
 - Anything outside your home directory (`~`)
-- Top-level protected directories (`~/Library`, `~/Documents`, `~/Desktop`, etc.)
+- Top-level protected directories — `~/Library`, `~/Documents`, `~/Desktop`, `~/Pictures`, `~/Downloads`, and more
+- Anything *inside* those personal directories (Documents, Desktop, Downloads, etc.)
 - The home directory itself
 
-Every deletion requires an explicit confirmation prompt. Use `--dry-run` to preview without touching anything.
+Every deletion requires an **explicit confirmation prompt**. Use `--dry-run` to simulate a cleanup run without touching the filesystem.
 
 ---
 
 ## Credits
 
-Idea and direction by a human who lost 100 GB to Mac bloat one too many times. Code written entirely by [Claude Code](https://claude.ai/code).
+Idea and direction by a developer who lost 100 GB to Xcode caches one afternoon.  
+Code written entirely by [Claude Code](https://claude.ai/code).
 
 ---
 
