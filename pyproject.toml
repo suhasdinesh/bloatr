@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bloatr"
+version = "0.1.0"
+description = "Kill your Mac's bloat. Select. Delete. Done."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["macos", "disk", "cleanup", "developer", "storage"]
+dependencies = [
+    "textual>=0.60",
+]
+
+[project.scripts]
+bloatr = "bloatr.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/bloatr"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bloatr"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
