@@ -18,7 +18,9 @@ dependencies = [
 bloatr = "bloatr.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/bloatr"
+Homepage = "https://github.com/suhasdinesh/bloatr"
+Repository = "https://github.com/suhasdinesh/bloatr"
+"Bug Tracker" = "https://github.com/suhasdinesh/bloatr/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/bloatr"]
