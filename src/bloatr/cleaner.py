@@ -24,6 +24,16 @@ _BLOCKLIST: frozenset[str] = frozenset({
     "Public", "Sites",
 })
 
+# Subset of _BLOCKLIST whose *contents* are also protected — these hold personal
+# files (documents, photos, music, etc.).  ~/Library is intentionally excluded
+# here because its subdirectories contain legitimate developer caches that bloatr
+# is designed to clean.
+_PERSONAL_DIRS: frozenset[str] = frozenset({
+    "Documents", "Desktop", "Downloads",
+    "Pictures", "Music", "Movies",
+    "Public", "Sites",
+})
+
 
 ProgressCallback = Callable[[int, str], None]
 """A callback that receives (bytes_delta, current_path) as deletion progresses."""
@@ -60,7 +70,14 @@ def is_safe_path(path: Path) -> bool:
     if len(relative.parts) < MIN_DEPTH:
         return False
 
+    # Block the top-level directory itself (e.g. ~/Library, ~/Documents).
     if len(relative.parts) == 1 and relative.parts[0] in _BLOCKLIST:
+        return False
+
+    # Block anything inside personal directories (e.g. ~/Documents/file.pdf,
+    # ~/Desktop/project/).  ~/Library is excluded from this check — its
+    # subdirectories (Caches, Developer, …) are legitimate deletion targets.
+    if len(relative.parts) > 1 and relative.parts[0] in _PERSONAL_DIRS:
         return False
 
     return True

@@ -5,6 +5,8 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
+from bloatr.cleaner import is_safe_path
+
 KNOWN_PATHS: tuple[str, ...] = (
     "~/Library/Developer/Xcode/DerivedData",
     "~/Library/Developer/Xcode/Archives",
@@ -64,7 +66,7 @@ def get_locations() -> list[Path]:
     locations: list[Path] = [Path(p).expanduser() for p in KNOWN_PATHS]
 
     brew = _brew_cache()
-    if brew is not None:
+    if brew is not None and is_safe_path(brew):
         locations.append(brew)
 
     return locations

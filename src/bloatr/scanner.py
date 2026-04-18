@@ -137,8 +137,7 @@ def list_children(item: Item) -> list[Item]:
     try:
         with os.scandir(item.path) as it:
             for entry in it:
-                if not entry.name.startswith(".") or True:  # show hidden too
-                    children.append(Path(entry.path))
+                children.append(Path(entry.path))
     except (PermissionError, OSError):
         return []
 
